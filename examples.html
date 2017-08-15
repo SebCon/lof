@@ -1,0 +1,44 @@
+
+<html>
+
+<style>
+  #test1 {
+    height: 100px;
+    background-color: #000;
+  }
+
+  .test2 {
+    opacity: 0;
+    height: 50px;
+    background-color: blue;
+  }
+</style>
+
+<link rel="stylesheet" href="lof.css">
+
+<body>
+
+<div id="test1"></div>
+
+<div class="test2"></div>
+<div class="test2"></div>
+
+<div> <p>Hallo</p> </div>
+
+</body>
+
+<script src="lof.js"></script>
+<script>
+  // blink blink effect
+  lof.get({class: 'test2', 'honk' : null, id : 'test1', css : 'div p'}).save('start').show().wait(1000).hide().wait(1000).show().wait(1000).hide();
+
+  // some other tests with addClass
+  lof.getSave('start').onclick('hide');
+  lof.getSave('start').addClass('nureineklasse').wait(1000).show();
+
+  // change css styles
+  lof.getSave('start').wait(1000).css('background-color', 'red');
+  lof.getSave('start').wait(1000).css('font-size', '64px');
+  console.log(test);
+</script>
+</html>

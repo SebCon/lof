@@ -1,5 +1,29 @@
 'use strict';
 
+
+/**
+*		@namespace Slideshow
+*/
+
+/**
+ *    @copyright 2017
+ *    @author Sebastian Conrad <http://www.sebcon.de/>
+ *    @version 1.0 - 15. August 2017
+ *    @see http://www.github.com/sebcon
+ *    @license Available under MIT license <https://mths.be/mit>
+ *    @fileoverview Light Framework for doing DOM and Layout stuff
+ */
+
+
+/**
+*		@class lof
+*
+*		@constructor
+*		@param {document}	document -
+*		@param {window} window -
+*		@param {performance} performance -
+**/
+
 var lof = (function(document, window, performance, console) {
 
   //this.config = config || {};
@@ -8,9 +32,6 @@ var lof = (function(document, window, performance, console) {
   var ELEMENT_TAG = 'tag';
   var ELEMENT_NAME = 'name';
   var ELEMENT_CSS = 'css';
-
-  var CLASS_FADE_IN = 'fadeIn';
-  var CLASS_FADE_OUT = 'fadeOut';
 
   var STYLE_HIDE = 'none';
   var STYLE_SHOW = 'block';
@@ -177,6 +198,7 @@ var lof = (function(document, window, performance, console) {
       references[ELEMENT_TAG] = (list.tag || null);
       references[ELEMENT_NAME] = (list.name || null);
       references[ELEMENT_CSS] = (list.css || null);
+      elements = [];
 
       for (var key in references) {
         if (references[key] !== null) {
@@ -258,8 +280,6 @@ var lof = (function(document, window, performance, console) {
   var show = function() {
     var callback = function(elem) {
       if (elem) {
-        //toogleClass(elem, CLASS_FADE_OUT, CLASS_FADE_IN);
-        //elem.classList.add(CLASS_FADE_IN);
         elem.style.display = STYLE_SHOW;
         elem.style.opacity = '1';
       }
@@ -272,9 +292,6 @@ var lof = (function(document, window, performance, console) {
 
   var hide = function() {
     var callback = function(elem) {
-      if (elem) {
-        //toogleClass(elem, CLASS_FADE_IN, CLASS_FADE_OUT);
-        //elem.classList.add(CLASS_FADE_IN);
         elem.style.display = STYLE_HIDE;
         elem.style.opacity = '0';
       }
@@ -354,18 +371,53 @@ var lof = (function(document, window, performance, console) {
   };
 
 
+
+  var transformCSS = function(prop) {
+    var newProp = '';
+    var mGreat = false;
+    for (var i=0; i < prop.length; i++) {
+      if (prop[i] === '-') {
+        mGreat = true;
+      } else {
+          if (mGreat) {
+            mGreat = false;
+            newProp += prop[i].toUpperCase();
+          } else {
+            if (prop[i] !== ' ') {
+              newProp += prop[i].toLowerCase();
+            }
+          }
+      }
+    }
+
+    return newProp;
+  };
+
+
   var css = function(prop, value) {
-    // @todo transform css prop in style prop
+    var back = [];
     if (prop && value !== undefined && value !== null) {
+      prop = transformCSS(prop);
+      console.warn(prop);
       var callback = function(elem) {
         if (elem) {
           elem.style[prop] = value;
         }
       };
       delayManager(callback);
+    } else if (prop) {
+      // props von den elementen ermitteln
+      var callback2 = function(elem) {
+        if (elem) {
+          console.log('prop: '+prop);
+          console.warn(elem.style[prop]);
+          back.push(elem.style[prop]);
+        }
+      };
+      iterator(elements, callback2);
     }
 
-    return this;
+    return back;
   };
 
 
@@ -388,5 +440,6 @@ var lof = (function(document, window, performance, console) {
     wait : wait,
     css : css
   };
+
 
 })(document, window, performance, console);
