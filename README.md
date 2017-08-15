@@ -104,7 +104,10 @@ lof.getSave('start').wait(1000).show();
 lof.getSave('start').wait(1000).hide();
 ```
 
-In background there is implemented a delay manager.
+In background there is implemented a delay manager. You can concat several functions to one:
+```javascript
+lof.getSave('start').wait(1000).show().wait(1000).hide();
+```
 
 
 ## Authors
