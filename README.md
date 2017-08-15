@@ -98,7 +98,7 @@ lof.getSave('start').hide();
 ```
 
 #### wait
-Like the delay functionality in JQuery, you can define wait time like this:
+Like the delay functionality in JQuery, you can define wait time before execute the following function like this:
 ```javascript
 lof.getSave('start').wait(1000).show();
 lof.getSave('start').wait(1000).hide();
@@ -107,6 +107,13 @@ lof.getSave('start').wait(1000).hide();
 In background there is implemented a delay manager. You can concat several functions to one:
 ```javascript
 lof.getSave('start').wait(1000).show().wait(1000).hide();
+```
+
+#### css
+Like in JQuery you can modify style attributes like:
+```javascript
+lof.getSave('start').wait(1000).css('background-color', 'red');
+lof.getSave('start').wait(1000).css('font-size', '64px');
 ```
 
 
