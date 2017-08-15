@@ -15,7 +15,7 @@ Download the file lof.js and link them in your project like:
 ```
 or without downloading files like
 ```html
-<script src="https://raw.githubusercontent.com/SebCon/lof/master/lof.js"></script>
+<script src="https://rawgit.com/SebCon/lof/master/lof.js"></script>
 ```
 
 ### DOM tree
