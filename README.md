@@ -119,7 +119,7 @@ lof.getSave('start').wait(1000).css('font-size', '64px');
 
 ## Authors
 
-* **Sebastian Conrad** - *Initial work* - [sebcon](http://www.sebcon.de)
+* **Sebastian Conrad** - [sebcon](http://www.sebcon.de)
 
 ## License
 
