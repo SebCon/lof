@@ -2,7 +2,7 @@
 
 
 /**
-*		@namespace Slideshow
+*		@namespace lof
 */
 
 /**
@@ -11,7 +11,7 @@
  *    @version 1.0 - 15. August 2017
  *    @see http://www.github.com/sebcon
  *    @license Available under MIT license <https://mths.be/mit>
- *    @fileoverview Light Framework for doing DOM and Layout stuff
+ *    @fileoverview Light Framework for doing DOM and Layout stuff like JQuery
  */
 
 
@@ -19,23 +19,30 @@
 *		@class lof
 *
 *		@constructor
-*		@param {document}	document -
-*		@param {window} window -
-*		@param {performance} performance -
+*		@param {document}	document document object
+*		@param {window} window window object
+*		@param {performance} performance performance object
 **/
 
 var lof = (function(document, window, performance, console) {
 
-  //this.config = config || {};
+  /** @constant {string} */
   var ELEMENT_ID = 'id';
+  /** @constant {string} */
   var ELEMENT_CLASS = 'class';
+  /** @constant {string} */
   var ELEMENT_TAG = 'tag';
+  /** @constant {string} */
   var ELEMENT_NAME = 'name';
+  /** @constant {string} */
   var ELEMENT_CSS = 'css';
 
+/** @constant {string} */
   var STYLE_HIDE = 'none';
+  /** @constant {string} */
   var STYLE_SHOW = 'block';
 
+/** @constant {string} */
   var VERSION = '1.0';
 
   var elements = [];
@@ -69,7 +76,6 @@ var lof = (function(document, window, performance, console) {
           var current = Date.now();
           if (current >= fx[i].timeStamp) {
             iterator(elements, fx[i].callback);
-            // @todo Element aus Array löschen ???
             fx.splice(i,1);
           } else {
             i++;
@@ -97,10 +103,7 @@ var lof = (function(document, window, performance, console) {
 
 
   var generateTimeStamp = function(delayTime) {
-    // @todo Korrekturwert berechnen und davon abziehen!
     var dt = (delayTime || 0);
-    console.log('delayTime: '+delayTime);
-    console.log('timeStamp: ' + (Date.now() + dt));
     return (Date.now() + dt);
   };
 
@@ -190,6 +193,17 @@ var lof = (function(document, window, performance, console) {
   };
 
 
+  /** get elements via id, class, tag, name or css
+  *		@function get
+  *		@param {Object} list config list
+  *   @param {string} list.id element id
+  *   @param {string} list.class element class
+  *   @param {string} list.tag element tag
+  *   @param {string} list.name element name
+  *   @param {string} list.css css selector
+  *
+  *   @return {this} lof object
+  **/
   var get = function(list) {
     if (list) {
       var references = {};
@@ -227,6 +241,12 @@ var lof = (function(document, window, performance, console) {
   };
 
 
+  /** remove class from elements
+  *		@function removeClass
+  *		@param {string} classes classes
+  *
+  *   @return {this} lof object
+  **/
   var removeClass = function(classes) {
     var temp = transformArray(classes);
 
@@ -242,6 +262,12 @@ var lof = (function(document, window, performance, console) {
   };
 
 
+  /** add class from elements
+  *		@function addClass
+  *		@param {string} classes classes
+  *
+  *   @return {this} lof object
+  **/
   var addClass = function(classes) {
     var temp = transformArray(classes);
 
@@ -277,6 +303,11 @@ var lof = (function(document, window, performance, console) {
   };
 
 
+  /** show elements via display show
+  *		@function show
+  *
+  *   @return {this} lof object
+  **/
   var show = function() {
     var callback = function(elem) {
       if (elem) {
@@ -290,11 +321,15 @@ var lof = (function(document, window, performance, console) {
   };
 
 
+  /** hide elements via display none
+  *		@function hide
+  *
+  *   @return {this} lof object
+  **/
   var hide = function() {
     var callback = function(elem) {
         elem.style.display = STYLE_HIDE;
         elem.style.opacity = '0';
-      }
     };
     delayManager(callback);
     return this;
@@ -302,12 +337,22 @@ var lof = (function(document, window, performance, console) {
 
 
 
-
+  /** get the last choosen elements
+  *		@function getLast
+  *
+  *   @return {(this|null)} lof object or null
+  **/
   var getLast = function() {
     return elements ? this : null;
   };
 
 
+  /** save elements via id number
+  *		@function save
+  *		@param {(string|number)} id id for saving
+  *
+  *   @return {this} lof object
+  **/
   var save = function(id) {
     if (elements && !saveElems[id]) {
       saveElems[id] = elements;
@@ -319,6 +364,12 @@ var lof = (function(document, window, performance, console) {
   };
 
 
+  /** get the save elements via id number
+  *		@function getSave
+  *		@param {(string|number)} id saved id
+  *
+  *   @return {this} lof object
+  **/
   var getSave = function(id) {
     elements = saveElems[id] ? saveElems[id] : null;
     if (elements === null) {
@@ -328,19 +379,23 @@ var lof = (function(document, window, performance, console) {
   };
 
 
-  var click = function(type) {
+  /** register lof function if you click on choosen elements
+  *		@function onclick
+  *		@param {string} type function name
+  *
+  *   @return {this} lof object
+  **/
+  var onclick = function(type) {
     var self = this;
-    //var callback;
     if (elements && type) {
-      //for (var i=0; i < elements.length; i++) {
       var callback = function(elem) {
         if (elem) {
+          // @todo: change event Listener -> EventHandler module
           elem.addEventListener('click', function() {
             if (isFunction(type)) {
               type.call();
             } else {
               if (self[type] && isFunction(self[type])) {
-                // in den delayManager ???
                 self[type].call();
               }
             }
@@ -360,10 +415,15 @@ var lof = (function(document, window, performance, console) {
   };
 
 
+  /** set delay time
+  *		@function wait
+  *		@param {number} time delay time
+  *
+  *   @return {this} lof object
+  **/
   var wait = function(time) {
-    // check if is NUMBER
-    if (time) {
-      // möglich: wait(1000).wait(1000)
+    // @todo: check if is NUMBER
+    if (time && time > 0) {
       delay += time;
     }
 
@@ -394,11 +454,17 @@ var lof = (function(document, window, performance, console) {
   };
 
 
+  /** get the value of the property | set the value of the property
+  *		@function css
+  *		@param {string} prop element property
+  *   @param {string} [value] property value
+  *
+  *   @return {string} value of property
+  **/
   var css = function(prop, value) {
     var back = [];
     if (prop && value !== undefined && value !== null) {
       prop = transformCSS(prop);
-      console.warn(prop);
       var callback = function(elem) {
         if (elem) {
           elem.style[prop] = value;
@@ -409,8 +475,6 @@ var lof = (function(document, window, performance, console) {
       // props von den elementen ermitteln
       var callback2 = function(elem) {
         if (elem) {
-          console.log('prop: '+prop);
-          console.warn(elem.style[prop]);
           back.push(elem.style[prop]);
         }
       };
@@ -421,6 +485,11 @@ var lof = (function(document, window, performance, console) {
   };
 
 
+  /** get version number
+  *		@function getVersion
+  *
+  *   @return {string} version number
+  **/
   var getVersion = function() {
     return VERSION;
   };
@@ -433,7 +502,7 @@ var lof = (function(document, window, performance, console) {
     show : show,
     hide : hide,
     getLast : getLast,
-    onclick : click,
+    onclick : onclick,
     addClass : addClass,
     removeClass : removeClass,
     getVersion : getVersion,
